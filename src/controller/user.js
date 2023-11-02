@@ -1,4 +1,4 @@
-import db from "../../models";
+import db from "../db/models";
 import dotenv from "dotenv";
 import {uploadToCloud} from "../helper/cloud";
 import jwt from "jsonwebtoken";
@@ -44,7 +44,10 @@ export const createUser = async (req,res) => {
           });
       }
       let result;
-      if(req.file) result = await uploadToCloud(req.file,res);
+      if(req.file){
+          result = await uploadToCloud(req.file,res);
+      } 
+      
       const salt = await bcrypt.genSalt(10);
       const hashedPass = await bcrypt.hash(password, salt);
       const newUser = await user.create({
@@ -157,7 +160,7 @@ export const updateUser = async(req,res) => {
         }
 
         const checkEmail = await user.findOne({where:{email:email}});
-        console.log(checkEmail.id);
+        console.log(id);
         if(checkEmail){
             if(checkEmail.id != id){
                 return res.status(409).json({
@@ -172,19 +175,20 @@ export const updateUser = async(req,res) => {
             if(password){ 
                 const salt = await bcrypt.genSalt(10);
                 const hashedPass = await bcrypt.hash(password, salt);
-        const updateU = await user.findByIdAndUpdate(id,{
-            firstName,
-            lastName,
-            email,
-            password: hashedPass,
-            profile,
-            role
-        });
+                const values = {
+                    firstName,
+                    lastName,
+                    email,
+                    password:hashedPass,
+                    profile,
+                    role
+                  };
+        const updateU = await user.update(values,{where:{id:id}});
 
         return res.status(200).json({
             status:"success",
             message: "user updated successfully",
-            data:updateU
+            data:values
 
         })
             } else {
@@ -210,6 +214,35 @@ export const updateUser = async(req,res) => {
             message:"failed to update user",
             error:error.message
         });
+
+    }
+}
+
+
+export const deleteUser = async (req,res) => {
+    try{
+        const {id} = req.params
+        const checkId = await user.findByPk(id);
+        if(!checkId){
+            return  res.status(404).json({
+                message:"User Not Found!"
+            })
+        }
+        const deleteB = await user.destroy({where:{id:id}});
+        return res.status(200).json({
+            status : "sucess",
+            message : "data deleted successfully",
+            data : deleteB
+
+        })
+
+    }
+    catch(error){
+        return res.status(500).json({
+            status : "failed",
+            message : "Failed To deletee",
+            error: error.message
+        })
 
     }
 }
