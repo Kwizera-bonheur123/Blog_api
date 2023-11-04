@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import userRouter from "./routes/userRoute";
+import postRoutes from "./routes/postRoutes";
 
 const app = express();
 dotenv.config()
@@ -49,7 +50,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 
 
-// app.use("/api/post", postRoutes)
+app.use("/api/post", postRoutes)
 app.use("/api/user", userRouter)
 
 app.use("/", (req,res)=>{

@@ -1,5 +1,4 @@
 import db from "../db/models";
-import dotenv from "dotenv";
 import {uploadToCloud} from "../helper/cloud";
 import jwt from "jsonwebtoken";
 import bcrypt, {gensalt, hash} from "bcrypt";

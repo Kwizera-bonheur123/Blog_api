@@ -1,1 +1,9 @@
-npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,password:string,profile:string,role:string,
+
+
+npx sequelize-cli model:generate --name post --attributes title:string,content:string,author:integer,postImage:string,comments:integer
+
+
+npx sequelize-cli model:generate --name comments --attributes postId:integer,content:string,author:integer
+
+add new attributes: npx sequelize migration:generate --name add-comments-to-post
