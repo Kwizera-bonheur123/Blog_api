@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     authorId: DataTypes.INTEGER,
     postImage: DataTypes.STRING,
+    views:DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Post',

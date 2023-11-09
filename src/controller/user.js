@@ -149,6 +149,7 @@ if (!req.body.email.match(emailRegex)) {
 
 export const updateUser = async(req,res) => {
     try{
+        console.log(req.file);
         const {id} = req.params;
         const {firstName,lastName,email,password,profile,role} = req.body;
         const checkId = await user.findByPk(id);
@@ -169,8 +170,9 @@ export const updateUser = async(req,res) => {
         }
 
         let result;
-        if(req.file) result = await uploadToCloud(req.file,res);
-
+      if(req.file){
+          result = await uploadToCloud(req.file,res);
+      } 
             if(password){ 
                 const salt = await bcrypt.genSalt(10);
                 const hashedPass = await bcrypt.hash(password, salt);
@@ -179,7 +181,7 @@ export const updateUser = async(req,res) => {
                     lastName,
                     email,
                     password:hashedPass,
-                    profile,
+                    profile:result?.secure_url,
                     role
                   };
         const updateU = await user.update(values,{where:{id:id}});
@@ -195,7 +197,7 @@ export const updateUser = async(req,res) => {
                     firstName,
                     lastName,
                     email,
-                    profile,
+                    profile:result?.secure_url,
                     role
                   };
                 const updateU = await user.update(values,{where:{id:id}});
@@ -231,7 +233,7 @@ export const deleteUser = async (req,res) => {
         return res.status(200).json({
             status : "sucess",
             message : "data deleted successfully",
-            data : deleteB
+            data : checkId
 
         })
 

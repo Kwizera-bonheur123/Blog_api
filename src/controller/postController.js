@@ -1,5 +1,5 @@
 import {uploadToCloud} from "../helper/cloud";
-import { Sequelize } from "sequelize";
+import { Sequelize, where } from "sequelize";
 import db from "../db/models";
 const Post = db['Post'];
 const user = db['User'];
@@ -27,9 +27,6 @@ export const createpost = async (req,res) => {
         }
         let result;
         if(req.file) result = await uploadToCloud(req.file,res);
-
-        console.log(result?.secure_url)
-    
         const newpost = await Post.create({
             title,
             content,
@@ -89,7 +86,7 @@ export const deletepost = async (req,res) => {
         return res.status(200).json({
             status : "sucess",
             message : "data deleted successfully",
-            data : deleteB
+            data : checkId
 
         })
     }
@@ -111,8 +108,11 @@ export const selectById = async (req,res) => {
 
         const {id} = req.params
         const checkId = await Post.findOne({
-            include: [{ model: user, as: 'author' }],
-            where: { id: id },
+            where:{id:id},
+            include: [
+                { model: user, as: 'author' },
+        {model: Comment, as: 'comments'}
+    ] // Include the 'author' association
           });
         
         if(!checkId){
@@ -120,7 +120,6 @@ export const selectById = async (req,res) => {
                 message:"post Not Found!"
             })
         }
-
         const addView = await Post.update({ views: Sequelize.literal('views + 1') }, { where: { id: id } });
         return res.status(200).json({
             status : "sucess",
@@ -204,7 +203,7 @@ export const addComment = async (req,res) =>{
         const newComment = await Comment.create({
           postId:id,
           content: req.body.content,
-          author: req.users.id, // Assuming you have an authenticated user
+          authorId: req.users.id, // Assuming you have an authenticated user
 
         });
     
