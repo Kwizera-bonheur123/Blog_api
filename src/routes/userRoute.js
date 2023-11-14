@@ -6,8 +6,6 @@ import fileUpload from '../helper/multer'
 
 const userRouter = express.Router();
 
-//Routes
-
 userRouter.post("/createUser", fileUpload.single("profile"), createUser);
 userRouter.post("/userLogin", fileUpload.single("profile"), userLogin);
 userRouter.get("/getAllUsers", getAllUser);
