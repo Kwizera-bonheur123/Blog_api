@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "npm test",
     "start": "npm run build && node ./build/src/index.js",
-    "start:dev": "nodemon --exec babel-node ./src/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build/src/ ./src/ -s",
-    "build": "npm run build-babel",
-    "seed": "npx sequelize-cli db:seed:all",
-    "make-seed": "npx sequelize-cli seed:generate --name demo-user",
-    "make-model": "npx sequelize-cli model:generate --name user --attributes firstName:string,lastName:string,email:string",
-    "migrate": "npx sequelize-cli db:migrate",
-    "down": "npx sequelize-cli db:migrate:undo"
+    "build": "npm run clean && npm run build-babel",
+    "migration": "sequelize db:migrate",
+    "migration:undo": "sequelize db:migrate:undo:all",
+    "migration:reset": "npm run migration:undo && npm run migration",
+    "seed": "npm run migration:undo && npm run migration && npx sequelize db:seed:undo:all && npx sequelize db:seed:all"
   },
   "author": "",
   "license": "ISC",
