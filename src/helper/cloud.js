@@ -9,11 +9,13 @@ cloudinary.config({
   api_secret: process.env.passKey,
 });
 export const uploadToCloud = async (file, res) => {
+  console.log("BNBNBNBN")
   try {
     const profilePicture = await cloudinary.uploader.upload(file.path, {
-      folder: "Blissmothies",
+      folder: "kdot",
       use_filename: true,
     });
+    console.log("HJHJHJH", profilePicture)
     return profilePicture;
   } catch (error) {
     return res.status(500).send(error);

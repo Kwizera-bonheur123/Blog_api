@@ -1,19 +1,18 @@
 {
   "name": "blog_api",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "seed":"npx sequelize-cli db:seed:all",
-    "make-seed":"npx sequelize-cli seed:generate --name demo-user",
-    "make-model":"npx sequelize-cli model:generate --name user --attributes firstName:string,lastName:string,email:string",
-    "migrate":"npx sequelize-cli db:migrate",
-    "down":"npx sequelize-cli db:migrate:undo",
     "start": "npm run build && node ./build/src/index.js",
     "start:dev": "nodemon --exec babel-node ./src/index.js",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build/src/ ./src/ -s",
-    "build": "npm run build-babel"
+    "build": "npm run build-babel",
+    "seed": "npx sequelize-cli db:seed:all",
+    "make-seed": "npx sequelize-cli seed:generate --name demo-user",
+    "make-model": "npx sequelize-cli model:generate --name user --attributes firstName:string,lastName:string,email:string",
+    "migrate": "npx sequelize-cli db:migrate",
+    "down": "npx sequelize-cli db:migrate:undo"
   },
   "author": "",
   "license": "ISC",
@@ -46,5 +45,6 @@
     "@babel/plugin-transform-runtime": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@babel/register": "^7.22.15"
-  }
+  },
+  "description": ""
 }
