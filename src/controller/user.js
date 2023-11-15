@@ -160,7 +160,6 @@ export const updateUser = async(req,res) => {
         }
 
         const checkEmail = await user.findOne({where:{email:email}});
-        console.log(id);
         if(checkEmail){
             if(checkEmail.id != id){
                 return res.status(409).json({
