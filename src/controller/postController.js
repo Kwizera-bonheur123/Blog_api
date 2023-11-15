@@ -50,14 +50,16 @@ export const createpost = async (req,res) => {
 
 export const selectpost = async (req, res) => {
     try {
+        let attributes = ['firstName','lastName','email','profile']
       const getpost = await Post.findAll({
-        include: [{ model: user, as: 'author' },
+        include: [{ model: user, as: 'author', attributes: attributes },
     {
         model: Comment, as: 'comments',
         include: [
             {
                 model: user, // Assuming User is the model for the author in Comment table and is imported
                 as: 'author', // Make sure this matches the alias in your Comment model association
+                attributes: attributes
             },
         ],
     }] // Include the 'author' association
@@ -110,18 +112,23 @@ export const deletepost = async (req,res) => {
 export const selectById = async (req,res) => {
     try{
 
+        let attributes = ['firstName','lastName','email','profile'];
+
         // Validate the 'id' parameter
 
         const {id} = req.params
         const checkId = await Post.findOne({
             where:{id:id},
             include: [
-                { model: user, as: 'author' },
+                { model: user, as: 'author',
+                attributes: attributes
+            },
         {model: Comment, as: 'comments',
         include: [
             {
                 model: user, // Assuming User is the model for the author in Comment table and is imported
                 as: 'author', // Make sure this matches the alias in your Comment model association
+                attributes: attributes
             },
         ],
     }
