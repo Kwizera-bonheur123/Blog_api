@@ -337,6 +337,7 @@
  */
 
 
+//update users
 
 /**
  * @swagger
@@ -349,7 +350,7 @@
  *       - in: path
  *         name: id
  *         required: true
- *         description: post ID to update
+ *         description: User ID to update
  *         schema:
  *           type: string
  *     requestBody:
@@ -359,9 +360,9 @@
  *           schema:
  *             type: object
  *             properties:
- *               first:
+ *               firstName:
  *                 type: string
- *               lastname:
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
@@ -369,10 +370,12 @@
  *                 type: string
  *               profile:
  *                 type: string
- *                 format: binary  
+ *                 format: binary
+ *               role:  # Add the role field
+ *                 type: string
  *     responses:
  *       200:
- *         description: post post updated successfully
+ *         description: User updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -383,9 +386,9 @@
  *                   example: "200"
  *                 message:
  *                   type: string
- *                   example: "post post updated successfully"
+ *                   example: "User updated successfully"
  *       404:
- *         description: post post not found
+ *         description: User not found
  *         content:
  *           application/json:
  *             schema:
@@ -396,9 +399,8 @@
  *                   example: "404"
  *                 message:
  *                   type: string
- *                   example: "post post not found"
+ *                   example: "User not found"
  */
-
 
 
 
