@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import userRouter from "./routes/userRoute";
 import postRoutes from "./routes/postRoutes";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
 dotenv.config()
@@ -20,7 +22,7 @@ const options = {
       description: 'Documentation for your Node.js API using Swagger',
     },
     servers:[{
-        url:"https://blog-6hj4.onrender.com"
+        url:"https://blog-api-5txy.onrender.com"
     }],
     security: [
       {
@@ -40,13 +42,13 @@ const options = {
   apis: ['./src/Docs/*.js'], // Specify the path to your route files
 };
 
-// const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options);
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
-// app.use("/Docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec))
+app.use("/Docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 app.use(express.json());
 
 
