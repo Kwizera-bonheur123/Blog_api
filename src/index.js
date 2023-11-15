@@ -13,17 +13,6 @@ const connectionToDatabase = async () => {
 
 connectionToDatabase();
 
-// const sequelize = new Sequelize('Blog', 'postgres', 'kwizera@123', {
-//   host: 'localhost',
-//   dialect: 'postgres',
-// });
-
-// Test the database connection
-// sequelize
-//   .authenticate()
-//   .then(() => console.log('Database connection has been established successfully.'))
-//   .catch((err) => console.error('Unable to connect to the database:', err));
-
 
 const PORT = process.env.PORT || 4100;
 

@@ -53,7 +53,13 @@ export const selectpost = async (req, res) => {
       const getpost = await Post.findAll({
         include: [{ model: user, as: 'author' },
     {
-        model: Comment, as: 'comments'
+        model: Comment, as: 'comments',
+        include: [
+            {
+                model: user, // Assuming User is the model for the author in Comment table and is imported
+                as: 'author', // Make sure this matches the alias in your Comment model association
+            },
+        ],
     }] // Include the 'author' association
       },
       );
@@ -111,7 +117,14 @@ export const selectById = async (req,res) => {
             where:{id:id},
             include: [
                 { model: user, as: 'author' },
-        {model: Comment, as: 'comments'}
+        {model: Comment, as: 'comments',
+        include: [
+            {
+                model: user, // Assuming User is the model for the author in Comment table and is imported
+                as: 'author', // Make sure this matches the alias in your Comment model association
+            },
+        ],
+    }
     ] // Include the 'author' association
           });
         
