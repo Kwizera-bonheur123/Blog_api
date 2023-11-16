@@ -23,12 +23,7 @@ module.exports = {
       postImage: {
         type: Sequelize.STRING,
         allowNull: false
-      },
-      comments: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      
-      },      
+      }, 
     views: {
       type: Sequelize.INTEGER,
       allowNull: false,
