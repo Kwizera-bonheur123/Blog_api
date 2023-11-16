@@ -64,7 +64,9 @@ export const selectpost = async (req, res) => {
                 'likeCount',
               ],
               'title',
-              'content'
+              'content',
+              'createdAt',
+              'updatedAt'
             ],
             include: [
               {
