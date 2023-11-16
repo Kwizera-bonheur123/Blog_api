@@ -4,6 +4,7 @@ import db from "../db/models";
 const Post = db['Post'];
 const user = db['User'];
 const Comment = db['Comment'];
+const Like = db['Likes'];
 // import Post from "../db/models/post";
 
 export const createpost = async (req,res) => {
@@ -51,20 +52,41 @@ export const createpost = async (req,res) => {
 export const selectpost = async (req, res) => {
     try {
         let attributes = ['firstName','lastName','email','profile']
-      const getpost = await Post.findAll({
-        include: [{ model: user, as: 'author', attributes: attributes },
-    {
-        model: Comment, as: 'comments',
-        include: [
-            {
-                model: user, // Assuming User is the model for the author in Comment table and is imported
-                as: 'author', // Make sure this matches the alias in your Comment model association
-                attributes: attributes
-            },
-        ],
-    }] // Include the 'author' association
-      },
-      );
+        const getpost = await Post.findAll({
+            attributes: [
+              [
+                Sequelize.literal(`(
+                  SELECT COUNT(*) 
+                  FROM "Likes"
+                  WHERE "Likes"."postId" = "Post"."id"
+                )`),
+                'likeCount',
+              ],
+            ],
+            include: [
+              {
+                model: user,
+                as: 'author',
+              },
+              {
+                model: Like,
+                as: 'likes',
+                attributes: ['authorId'],
+              },
+              {
+                model: Comment,
+                as: 'comments',
+                include: [
+                  {
+                    model: user,
+                    as: 'author',
+                    attributes: attributes,
+                  },
+                ],
+              },
+            ],
+          });
+          
       return res.status(200).json({
         status: "Success",
         message: "Data Retrieved Successfully",
@@ -237,4 +259,39 @@ export const addComment = async (req,res) =>{
           error: error.message,
         });
 }} 
+
+export const addLike = async(req,res) => {
+    try{
+        const {id} = req.params;
+    const checkId = await Post.findByPk(id);
+    if(!checkId){
+        return res.status(404).json({
+            status: 404,
+            message:"Post not found"
+        })
+    }
+        const checkLike = await Like.findOne({where:{authorId:req.users.id}&& {postId:id}});
+        if(checkLike){
+        const deleteLike = await Like.destroy({where:{id:checkLike.id}})
+        return res.status(200).json({
+            status: 200,
+            message:"Like is removed successfully"
+        });
+    }
+        const addLike = await Like.create({
+            postId:id,
+            authorId:req.users.id
+        })
+        return res.status(200).json({
+            status: 200,
+            message:"Like added successfully",
+        })
+    } catch(error){
+        return res.status(500).json({
+            status:500,
+            message:"Fail to add like on post",
+            error:error.message
+        })
+    }
+}
 
