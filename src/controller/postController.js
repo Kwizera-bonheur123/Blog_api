@@ -53,6 +53,7 @@ export const selectpost = async (req, res) => {
     try {
         let attributes = ['firstName','lastName','email','profile']
         const getpost = await Post.findAll({
+            //add likes
             attributes: [
               [
                 Sequelize.literal(`(
@@ -62,11 +63,14 @@ export const selectpost = async (req, res) => {
                 )`),
                 'likeCount',
               ],
+              'title',
+              'content'
             ],
             include: [
               {
                 model: user,
                 as: 'author',
+                attributes: attributes
               },
               {
                 model: Like,
