@@ -77,7 +77,13 @@ export const selectpost = async (req, res) => {
               {
                 model: Like,
                 as: 'likes',
-                attributes: ['authorId'],
+                include: [
+                    {
+                      model: user,
+                      as: 'author',
+                      attributes: attributes,
+                    },
+                  ],
               },
               {
                 model: Comment,
@@ -147,20 +153,49 @@ export const selectById = async (req,res) => {
         const {id} = req.params
         const checkId = await Post.findOne({
             where:{id:id},
-            include: [
-                { model: user, as: 'author',
-                attributes: attributes
-            },
-        {model: Comment, as: 'comments',
-        include: [
-            {
-                model: user, // Assuming User is the model for the author in Comment table and is imported
-                as: 'author', // Make sure this matches the alias in your Comment model association
-                attributes: attributes
-            },
-        ],
-    }
-    ] // Include the 'author' association
+            attributes: [
+                [
+                  Sequelize.literal(`(
+                    SELECT COUNT(*) 
+                    FROM "Likes"
+                    WHERE "Likes"."postId" = "Post"."id"
+                  )`),
+                  'likeCount',
+                ],
+                'title',
+                'content',
+                'createdAt',
+                'updatedAt'
+              ],
+              include: [
+                {
+                  model: user,
+                  as: 'author',
+                  attributes: attributes
+                },
+                {
+                  model: Like,
+                  as: 'likes',
+                  include: [
+                      {
+                        model: user,
+                        as: 'author',
+                        attributes: attributes,
+                      },
+                    ],
+                },
+                {
+                  model: Comment,
+                  as: 'comments',
+                  include: [
+                    {
+                      model: user,
+                      as: 'author',
+                      attributes: attributes,
+                    },
+                  ],
+                },
+              ],
           });
         
         if(!checkId){

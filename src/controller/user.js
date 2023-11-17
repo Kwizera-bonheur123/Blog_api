@@ -149,7 +149,6 @@ if (!req.body.email.match(emailRegex)) {
 
 export const updateUser = async(req,res) => {
     try{
-        console.log(req.file);
         const {id} = req.params;
         const {firstName,lastName,email,password,profile,role} = req.body;
         const checkId = await user.findByPk(id);
@@ -159,6 +158,8 @@ export const updateUser = async(req,res) => {
             })
         }
 
+        if(email){
+
         const checkEmail = await user.findOne({where:{email:email}});
         if(checkEmail){
             if(checkEmail.id != id){
@@ -167,6 +168,7 @@ export const updateUser = async(req,res) => {
                 })
             }
         }
+    }
 
         let result;
       if(req.file){
