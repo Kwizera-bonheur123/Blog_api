@@ -4,4 +4,4 @@
     "migrate": "npx sequelize-cli db:migrate",
     "down": "npx sequelize-cli db:migrate:undo",
 
-    npx sequelize-cli model:generate --name like --attributes author:string,postId:integer
+    npx sequelize-cli model:generate --name UnLike --attributes author:string,postId:integer

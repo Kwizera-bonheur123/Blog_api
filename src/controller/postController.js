@@ -1,10 +1,11 @@
 import {uploadToCloud} from "../helper/cloud";
-import { Sequelize, where } from "sequelize";
+import { Sequelize } from "sequelize";
 import db from "../db/models";
 const Post = db['Post'];
 const user = db['User'];
 const Comment = db['Comment'];
 const Like = db['Likes'];
+const UnLike = db['UnLikes'];
 // import Post from "../db/models/post";
 
 export const createpost = async (req,res) => {
@@ -154,7 +155,8 @@ export const selectById = async (req,res) => {
         const checkId = await Post.findOne({
             where:{id:id},
             attributes: [
-                [
+              'id',
+              [
                   Sequelize.literal(`(
                     SELECT COUNT(*) 
                     FROM "Likes"
@@ -176,6 +178,17 @@ export const selectById = async (req,res) => {
                 {
                   model: Like,
                   as: 'likes',
+                  include: [
+                      {
+                        model: user,
+                        as: 'author',
+                        attributes: attributes,
+                      },
+                    ],
+                },
+                {
+                  model: UnLike,
+                  as: 'unlikes',
                   include: [
                       {
                         model: user,
@@ -334,5 +347,56 @@ export const addLike = async(req,res) => {
             error:error.message
         })
     }
+}
+
+
+
+export const addUnLike = async(req,res) => {
+  try{
+      const {id} = req.params;
+  const checkId = await Post.findByPk(id);
+  if(!checkId){
+      return res.status(404).json({
+          status: 404,
+          message:"Post not found"
+      })
+  }
+      const checkUnLike = await UnLike.findOne({where:{authorId:req.users.id}&& {postId:id}});
+      if(checkUnLike){
+      const deleteUnLike = await UnLike.destroy({where:{id:checkUnLike.id}})
+      return res.status(200).json({
+          status: 200,
+          message:"UnLike is removed successfully"
+      });
+  }
+
+  const checkLike = await Like.findOne({where:{authorId:req.users.id}&& {postId:id}});
+  if(checkLike){
+    const deleteLike = await Like.destroy({where:{id:checkLike.id}})
+    const addUnLike = await UnLike.create({
+      postId:id,
+      authorId:req.users.id
+    })
+    return res.status(200).json({
+      status: 200,
+      message:"UnLike added successfully",
+  })
+  } else{
+    const addUnLike = await UnLike.create({
+      postId:id,
+      authorId:req.users.id
+    })
+    return res.status(200).json({
+      status: 200,
+      message:"UnLike added successfully",
+  })
+  }
+  } catch(error){
+      return res.status(500).json({
+          status:500,
+          message:"Fail to add unlike on post",
+          error:error.message
+      })
+  }
 }
 
