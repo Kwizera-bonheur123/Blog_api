@@ -22,7 +22,7 @@ const options = {
       description: 'Documentation for your Node.js API using Swagger',
     },
     servers:[{
-        url:"https://blog-api-5txy.onrender.com"
+        url:"http://localhost:5000"
     }],
     security: [
       {

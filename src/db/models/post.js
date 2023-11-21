@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const unlike = require('./unlike');
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     /**
@@ -13,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
      Post.belongsTo(models.User,{
       as: 'author',
       foreignKey: 'authorId'
+     });
+     Post.hasMany(models.UnLikes,{
+      as:"unlikes",
+      foreignKey:"postId"
      })
      Post.hasMany(models.Comment, {
       as:'comments',

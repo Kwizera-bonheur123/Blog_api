@@ -457,7 +457,7 @@
  */
 
 
-// Delete post by Id
+// Delete User by Id
 
 /**
  * @swagger
@@ -466,6 +466,121 @@
  *     summary: Delete a post post by ID
  *     tags:
  *       - User
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: post ID to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: post post deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "200"
+ *                 message:
+ *                   type: string
+ *                   example: "post post deleted successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     bogImage:
+ *                       type: string
+ *                       example: http://example.com/post_image.jpg
+ *                     postTitle:
+ *                       type: string
+ *                       example: "Title of the post"
+ *                     postContent:
+ *                       type: string
+ *                       example: "Content of the post post"
+ *       404:
+ *         description: post post not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "404"
+ *                 message:
+ *                   type: string
+ *                   example: "post post not found"
+ */
+
+//Unlike
+
+/**
+ * @swagger
+ * /api/post/unlike/{id}:
+ *   post:
+ *     summary: Delete a post post by ID
+ *     tags:
+ *       - post
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: post ID to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: post post deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "200"
+ *                 message:
+ *                   type: string
+ *                   example: "post post deleted successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     bogImage:
+ *                       type: string
+ *                       example: http://example.com/post_image.jpg
+ *                     postTitle:
+ *                       type: string
+ *                       example: "Title of the post"
+ *                     postContent:
+ *                       type: string
+ *                       example: "Content of the post post"
+ *       404:
+ *         description: post post not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "404"
+ *                 message:
+ *                   type: string
+ *                   example: "post post not found"
+ */
+
+
+//Like 
+
+/**
+ * @swagger
+ * /api/post/like/{id}:
+ *   post:
+ *     summary: Delete a post post by ID
+ *     tags:
+ *       - post
  *     parameters:
  *       - in: path
  *         name: id
